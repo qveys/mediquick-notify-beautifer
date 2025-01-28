@@ -37,18 +37,23 @@ export class ErrorBoundary extends Component<Props, State> {
               Oups ! Quelque chose s'est mal passé
             </h1>
             <p className="text-muted-foreground">
-              Une erreur inattendue est survenue. Nous nous excusons pour la gêne occasionnée.
+              Une erreur inattendue s'est produite. Nos équipes ont été notifiées 
+              et travaillent à résoudre le problème.
             </p>
             {this.state.error && (
-              <pre className="mt-4 p-4 bg-muted rounded-lg text-left overflow-auto text-sm">
-                {this.state.error.message}
-              </pre>
+              <div className="bg-muted/30 p-4 rounded-md text-left overflow-auto">
+                <p className="font-mono text-sm text-muted-foreground">
+                  {this.state.error.toString()}
+                </p>
+              </div>
             )}
-            <div className="mt-6">
-              <Button onClick={this.handleReload} variant="default">
-                Recharger l'application
-              </Button>
-            </div>
+            <Button
+              variant="default"
+              className="mt-4"
+              onClick={this.handleReload}
+            >
+              Rafraîchir la page
+            </Button>
           </div>
         </div>
       );
