@@ -4,14 +4,14 @@ import MedicationList from '@/components/medications/MedicationList';
 const mockMedications = [
   {
     id: 1,
-    name: 'Test Medication 1',
+    name: 'Medication 1',
     time: '08:00',
     dosage: '1 comprimé',
     status: 'pending' as const,
   },
   {
     id: 2,
-    name: 'Test Medication 2',
+    name: 'Medication 2',
     time: '12:00',
     dosage: '2 comprimés',
     status: 'pending' as const,
@@ -19,12 +19,19 @@ const mockMedications = [
 ];
 
 describe('MedicationList', () => {
-  it('renders loading state correctly', () => {
+  const mockOnTake = vi.fn();
+  const mockOnSkip = vi.fn();
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('renders loading state', () => {
     render(
       <MedicationList
         medications={[]}
-        onTake={jest.fn()}
-        onSkip={jest.fn()}
+        onTake={mockOnTake}
+        onSkip={mockOnSkip}
         isLoading={true}
       />
     );
@@ -32,12 +39,12 @@ describe('MedicationList', () => {
     expect(screen.getByText('Chargement...')).toBeInTheDocument();
   });
 
-  it('renders empty state correctly', () => {
+  it('renders empty state when no medications', () => {
     render(
       <MedicationList
         medications={[]}
-        onTake={jest.fn()}
-        onSkip={jest.fn()}
+        onTake={mockOnTake}
+        onSkip={mockOnSkip}
         isLoading={false}
       />
     );
@@ -45,19 +52,20 @@ describe('MedicationList', () => {
     expect(screen.getByText('Aucun médicament programmé')).toBeInTheDocument();
   });
 
-  it('renders medication list correctly', () => {
+  it('renders list of medications', () => {
     render(
       <MedicationList
         medications={mockMedications}
-        onTake={jest.fn()}
-        onSkip={jest.fn()}
+        onTake={mockOnTake}
+        onSkip={mockOnSkip}
         isLoading={false}
       />
     );
 
-    expect(screen.getByText('Test Medication 1')).toBeInTheDocument();
-    expect(screen.getByText('Test Medication 2')).toBeInTheDocument();
-    expect(screen.getByText('08:00')).toBeInTheDocument();
-    expect(screen.getByText('12:00')).toBeInTheDocument();
+    mockMedications.forEach(medication => {
+      expect(screen.getByText(medication.name)).toBeInTheDocument();
+      expect(screen.getByText(medication.time)).toBeInTheDocument();
+      expect(screen.getByText(medication.dosage)).toBeInTheDocument();
+    });
   });
 });

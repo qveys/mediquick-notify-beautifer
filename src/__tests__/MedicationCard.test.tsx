@@ -10,52 +10,50 @@ const mockMedication = {
 };
 
 describe('MedicationCard', () => {
-  it('renders medication information correctly', () => {
-    const handleTake = jest.fn();
-    const handleSkip = jest.fn();
+  const mockOnTake = vi.fn();
+  const mockOnSkip = vi.fn();
 
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('renders medication information correctly', () => {
     render(
       <MedicationCard
         medication={mockMedication}
-        onTake={handleTake}
-        onSkip={handleSkip}
+        onTake={mockOnTake}
+        onSkip={mockOnSkip}
       />
     );
 
-    expect(screen.getByText('Test Medication')).toBeInTheDocument();
-    expect(screen.getByText('08:00')).toBeInTheDocument();
-    expect(screen.getByText('1 comprimé')).toBeInTheDocument();
+    expect(screen.getByText(mockMedication.name)).toBeInTheDocument();
+    expect(screen.getByText(mockMedication.time)).toBeInTheDocument();
+    expect(screen.getByText(mockMedication.dosage)).toBeInTheDocument();
   });
 
-  it('calls onTake when take button is clicked', () => {
-    const handleTake = jest.fn();
-    const handleSkip = jest.fn();
-
+  it('calls onTake when Take button is clicked', () => {
     render(
       <MedicationCard
         medication={mockMedication}
-        onTake={handleTake}
-        onSkip={handleSkip}
+        onTake={mockOnTake}
+        onSkip={mockOnSkip}
       />
     );
 
     fireEvent.click(screen.getByText('Take'));
-    expect(handleTake).toHaveBeenCalledWith(mockMedication.id);
+    expect(mockOnTake).toHaveBeenCalledWith(mockMedication.id);
   });
 
-  it('calls onSkip when skip button is clicked', () => {
-    const handleTake = jest.fn();
-    const handleSkip = jest.fn();
-
+  it('calls onSkip when Skip button is clicked', () => {
     render(
       <MedicationCard
         medication={mockMedication}
-        onTake={handleTake}
-        onSkip={handleSkip}
+        onTake={mockOnTake}
+        onSkip={mockOnSkip}
       />
     );
 
     fireEvent.click(screen.getByText('Skip'));
-    expect(handleSkip).toHaveBeenCalledWith(mockMedication.id);
+    expect(mockOnSkip).toHaveBeenCalledWith(mockMedication.id);
   });
 });
